@@ -1,0 +1,8 @@
+{
+    "userId": "student1",
+    "schoolId": "school1",
+    "timestamp": 123,
+    "type": "in",
+    "temperature": 35,
+    "token": "abcd"
+}
