@@ -2,6 +2,8 @@ defmodule FeApiWeb.Auth do
   import Plug.Conn
   import Phoenix.Controller
 
+  require Logger
+
   def init(opts), do: opts
 
   def call(conn, _opts) do
@@ -9,8 +11,17 @@ defmodule FeApiWeb.Auth do
     |> get_token()
     |> verify_token()
     |> case do
-      {:ok, userId} -> assign(conn, :currentUser, userId)
-      _unauthorized -> assign(conn, :currentUser, nil)
+      {:ok, userId} ->
+        Logger.debug("verify token sucess for #{userId}")
+        assign(conn, :currentUser, userId)
+      _unauthorized ->
+        # skip for test & dev environment.
+        if Application.get_env(:fe_api, :test_env)[:disable_auth] do
+          Logger.debug("ignore authenticate, disable from config")
+          assign(conn, :currentUser, "test_user")
+        else
+          assign(conn, :currentUser, nil)
+        end
     end
   end
 
@@ -48,10 +59,10 @@ defmodule FeApiWeb.Auth do
   def get_token(conn) do
     case get_req_header(conn, "authorization") do
       ["Bearer " <> token] ->
-        IO.puts("verify token is OK")
+        Logger.debug("token is included in header")
         token
       _ ->
-        IO.puts("verity token failed")
+        Logger.debug("token is missed in header")
         nil
     end
   end

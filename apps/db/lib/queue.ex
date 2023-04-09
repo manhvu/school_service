@@ -1,6 +1,6 @@
 defmodule Db.Queue do
   use GenServer
-
+  require Logger
 
   ## API
 
@@ -20,7 +20,7 @@ defmodule Db.Queue do
 
   @impl true
   def init(_opts) do
-    IO.puts("started queue")
+    Logger.debug("started queue")
     {:ok, :queue.new()}
   end
 

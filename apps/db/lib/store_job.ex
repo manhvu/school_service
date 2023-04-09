@@ -20,7 +20,7 @@ defmodule Db.StoreJob do
   @impl true
   def init(counter) do
     alias Db.Storage
-   :ok = Storage.initDb()
+    :ok = Storage.initDb()
 
     schedule_work(100)
     {:ok, counter}

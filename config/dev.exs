@@ -63,3 +63,12 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :fe_api, :test_env,
+  disable_auth: true
+
+
+
+config :simu_traffic, :test_env,
+  counter: 4,
+  url: "http://localhost:8080/api/student"

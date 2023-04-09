@@ -1,6 +1,8 @@
 defmodule FeApiWeb.StudentController do
   use FeApiWeb, :controller
 
+  require Logger
+
   alias FeApiWeb.Student
   alias Db.Queue
 
@@ -8,13 +10,11 @@ defmodule FeApiWeb.StudentController do
   plug :authenticate_api_user when action in [:create]
 
   def create(conn, _params) do
-    IO.puts("print body\n")
-    IO.inspect(conn.body_params)
+    Logger.debug("print body\n #{inspect conn.body_params}")
     map = Map.put(conn.body_params, "uuid", UUID.uuid1())
-   {:ok, student} = Nestru.decode_from_map(map, Student)
 
-   IO.puts("print struct\n")
-   IO.inspect(student)
+    {:ok, student} = Nestru.decode_from_map(map, Student)
+    Logger.debug("print struct\n #{inspect student}")
 
    Queue.add(student)
 

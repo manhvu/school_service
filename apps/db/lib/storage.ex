@@ -2,7 +2,8 @@ defmodule Db.Storage do
   alias FeApiWeb.Student
   alias :mnesia, as: Mnesia
 
-  require Record
+  require Record, Logger
+
   Record.defrecord(:studentLog, uuid: nil, userId: nil, schoolId: nil,  timestamp: 0, type: :in, temperature: 0)
 
   # def toRecord(%FeApiWeb.Student{} = student) do
@@ -18,7 +19,7 @@ defmodule Db.Storage do
         {:error, {_, {:already_exists, _}}} ->
           :existed
         r ->
-          IO.inspect(r)
+          Logger.error("cannot create schema, result: #{inspect r}")
           raise "cannot create db"
       end
 
@@ -41,8 +42,7 @@ defmodule Db.Storage do
         {:aborted, {:already_exists, _}} ->
           :ok
         r ->
-          IO.puts("cannot create Mnesia table")
-          IO.inspect(r)
+          Logger.error("cannot create schema, result: #{inspect r}")
           raise "failed to create table"
       end
     else
