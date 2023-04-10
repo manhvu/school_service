@@ -1,4 +1,9 @@
 defmodule Db.Queue do
+  @moduledoc """
+  This module is a queue. Receives data and storage in memory then other job can consume later.
+  App has one global queue.
+  """
+
   use GenServer
   require Logger
 
@@ -8,10 +13,16 @@ defmodule Db.Queue do
     GenServer.start_link(__MODULE__,  [],  name: __MODULE__)
   end
 
+  @doc """
+  receives data then store in queue.
+  """
   def add(data) do
     GenServer.cast(__MODULE__, {:in, data})
   end
 
+  @doc """
+  gets data from queue
+  """
   def get() do
     GenServer.call(__MODULE__, {:out})
   end

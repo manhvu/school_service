@@ -1,4 +1,8 @@
 defmodule Db.Token do
+  @moduledoc """
+  The module is used to check token (old way) for api.
+  """
+
   use GenServer
 
   alias ETS.Set
@@ -9,6 +13,9 @@ defmodule Db.Token do
     GenServer.start_link(__MODULE__,  [],  name: __MODULE__)
   end
 
+  @doc """
+  Gets list of token for user.
+  """
   def get_tokens(userId) do
     r =
       __MODULE__
@@ -24,10 +31,16 @@ defmodule Db.Token do
 
   end
 
+  @doc """
+  Checks a token of a user is existed.
+  """
   def existed_token(userId, token) do
     GenServer.call(__MODULE__, {:existed_token, userId, token})
   end
 
+  @doc """
+  Adds a token for user.
+  """
   def add_token(userId, token) do
     newToken = {token, NaiveDateTime.utc_now() }
     GenServer.cast(__MODULE__, {:add_token, userId, newToken})

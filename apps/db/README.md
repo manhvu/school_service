@@ -1,21 +1,4 @@
 # Db
 
-**TODO: Add description**
-
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `db` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:db, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/db>.
+App processes data from frontend api then push to mnesia database. An main idea of app is cache data to queue that stored in memory then other job get data from the queue and push to disk.
 

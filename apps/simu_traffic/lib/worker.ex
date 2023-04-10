@@ -1,4 +1,8 @@
 defmodule SimuTraffic.Worker do
+  @moduledoc """
+  Simulates traffic to test frontend api.
+  """
+
   alias SimuTraffic.Worker
 
   require Logger
@@ -6,29 +10,15 @@ defmodule SimuTraffic.Worker do
   @derive Nestru.Encoder
   defstruct [:timestamp, :userId, :schoolId, :temperature, :type]
 
-  def start_link(_arg) do
-    pid = spawn_link(__MODULE__, :init, [:ok])
+  def start_link(arg) do
+    pid = spawn_link(__MODULE__, :init, [arg])
     {:ok, pid}
   end
 
-  def init(_arg) do
-    counter =
-      case Application.get_env(:simu_traffic, :test_env)[:counter] do
-        nil ->
-          raise "missed counter for simu traffic"
-        n when is_integer(n)->
-            n
-      end
-    url =
-      case Application.get_env(:simu_traffic, :test_env)[:url] do
-        nil ->
-          raise "missed url for simu traffic"
-        s when is_binary(s)->
-            s
-      end
-
-    Logger.debug "start worker with counter = #{counter}, url = #{url}"
-    loop_request(counter, url, %{success: 0, failed: 0, error: 0})
+  def init({id, counter, url}) do
+    Logger.debug "start worker(#{id}) with counter = #{counter}, url = #{url}"
+    Process.put(:start_time, get_timestamp())
+    loop_request(id, counter, url, %{success: 0, failed: 0, error: 0})
   end
 
 
@@ -37,31 +27,40 @@ defmodule SimuTraffic.Worker do
       id: __MODULE__,
       start: {__MODULE__, :start_link, [opts]},
       type: :worker,
-      restart: :permanent,
-      shutdown: 500
+      restart: :transient,
+      shutdown: :brutal_kill
     }
   end
 
-  # if loop couter < 0 that min simu traffic will run non stop!
-  def loop_request(0, _url, stat) do
+  @doc """
+  loop function, generate fake data and send to frontend api.
+  in case counter < 0 -> infinity request will send to server.
+  """
+  def loop_request(id, 0, _url, stat) do
+    stop_time = get_timestamp()
+    start_time = Process.get(:start_time)
+
     %{success: s} = stat
     %{failed: f} = stat
     %{error: e} = stat
 
-    Logger.debug "Simu Traffic DONE!, success: #{s}, failed: #{f}, error: #{e}"
+    Logger.info "Simu Traffic, worker(#{id}) DONE!, time: #{stop_time - start_time}s, success: #{s}, failed: #{f}, error: #{e}"
   end
-  def loop_request(n, url, %{} = stat) do
+  def loop_request(id, n, url, %{} = stat) do
     student = %Worker{
       timestamp: get_timestamp(),
       userId: "user_" <> Integer.to_string(Enum.random(1..10000)),
       schoolId: "school_" <> Integer.to_string(Enum.random(1..1500)) ,
-      temperature: Enum.random(30..42) # temperature at Celius
+      temperature: Enum.random(30..42), # temperature at Celius
+      type: get_random_type()
     }
     {:ok, map} =  Nestru.encode_to_map(student)
     body = Jason.encode!(map)
+    Logger.debug("json: #{body}")
+
     stat =
-      case HTTPoison.post(url, body) do
-        {:ok, %{status_code: 201, body: body2}} ->
+      case HTTPoison.post(url, body, [{"content-type", "application/json"}]) do
+        {:ok, %{status_code: 201, body: _body2}} ->
           Map.update!(stat, :success, &(&1 + 1))
         {:ok, %{status_code: code}} ->
           Logger.debug "failed to post data return code: #{code}"
@@ -72,13 +71,28 @@ defmodule SimuTraffic.Worker do
       end
 
       if n > 0 do
-        loop_request(n - 1, url, stat)
+        loop_request(id, n - 1, url, stat)
       else
-        loop_request(n, url, stat)
+        loop_request(id, n, url, stat)
       end
   end
 
+  @doc """
+  Gets timestamp from os.
+  """
   def get_timestamp do
     :os.system_time(:seconds)
+  end
+
+  @doc """
+  Randoms checkin/checkout action.
+  """
+  def get_random_type do
+    case Enum.random(1..2) do
+      1 ->
+        :in
+      _ ->
+        :out
+    end
   end
 end

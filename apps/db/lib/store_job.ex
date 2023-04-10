@@ -1,15 +1,24 @@
 defmodule Db.StoreJob do
+  @moduledoc """
+  Pushs data from queue to database (disk)
+  """
+
   use GenServer
+
+  require Logger
 
   alias Db.Queue
   alias FeApiWeb.Student
   alias :mnesia, as: Mnesia
 
   ## API
+
+  @doc """
+  Gets number of record has push to database.
+  """
   def get_counter() do
 
   end
-
 
   def start_link([counter]) do
     GenServer.start_link(__MODULE__, counter)
@@ -31,6 +40,7 @@ defmodule Db.StoreJob do
     counter =
     case Queue.get() do
       nil ->
+        # sleep more if queue doesn't have data.
         schedule_work(1000)
         counter
       student ->
@@ -42,7 +52,7 @@ defmodule Db.StoreJob do
           end
         )
 
-        IO.inspect(r2)
+        Logger.debug("write data to db, result: #{inspect(r2)}")
         schedule_work(0)
         counter + 1
     end
@@ -50,8 +60,11 @@ defmodule Db.StoreJob do
     {:noreply, counter}
   end
 
+  @doc """
+  Sends a command to worker to process data.
+  """
   defp schedule_work(time) do
-    # After 5 seconds(5 * 1000 in milliseconds) the desired task will take place.
+    # TO-DO: improve this.
     Process.send_after(self(), :work , time)
   end
 end

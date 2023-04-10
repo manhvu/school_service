@@ -69,6 +69,7 @@ config :fe_api, :test_env,
 
 
 
-config :simu_traffic, :test_env,
-  counter: 4,
+config :simu_traffic, :test_info,
+  counter: 10000,
+  worker: 10,
   url: "http://localhost:8080/api/student"

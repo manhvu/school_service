@@ -1,4 +1,8 @@
 defmodule SimuTraffic.DynamicSupervisor do
+  @moduledoc """
+  DynamicSupervisor, uses for add worker in runtime.
+  """
+
   use DynamicSupervisor
 
   def start_link(init_arg) do

@@ -1,11 +1,18 @@
 defmodule FeApiWeb.Auth do
+  @moduledoc """
+  Uses for authenticate for REST API. Current version just support token generate from app.
+  Module is a plug for phoenix framework.
+  """
+
   import Plug.Conn
   import Phoenix.Controller
 
   require Logger
 
+  @spec init(any) :: any
   def init(opts), do: opts
 
+  @spec call(Plug.Conn.t(), any) :: Plug.Conn.t()
   def call(conn, _opts) do
     conn
     |> get_token()
@@ -25,6 +32,10 @@ defmodule FeApiWeb.Auth do
     end
   end
 
+  @doc """
+  Generates token for APIs of a user.
+  """
+  @spec generate_token(any) :: nonempty_binary
   def generate_token(user_id) do
     Phoenix.Token.sign(
       FeApiWeb.Endpoint,
@@ -33,6 +44,11 @@ defmodule FeApiWeb.Auth do
     )
   end
 
+  @doc """
+  check if user is valid
+  """
+  @spec authenticate_api_user(atom | %{:assigns => map, optional(any) => any}, any) ::
+          atom | %{:assigns => map, optional(any) => any}
   def authenticate_api_user(conn, _opts) do
     if Map.get(conn.assigns, :currentUser) do
       conn
@@ -45,6 +61,10 @@ defmodule FeApiWeb.Auth do
     end
   end
 
+  @doc """
+  verifies token, current valid time is one month.
+  """
+  @spec verify_token(nil | binary) :: {:error, :expired | :invalid | :missing} | {:ok, any}
   def verify_token(token) do
     one_month = 30 * 24 * 60 * 60
 
@@ -56,6 +76,10 @@ defmodule FeApiWeb.Auth do
     )
   end
 
+  @doc """
+  extracts token from header.
+  """
+  @spec get_token(Plug.Conn.t()) :: nil | binary
   def get_token(conn) do
     case get_req_header(conn, "authorization") do
       ["Bearer " <> token] ->

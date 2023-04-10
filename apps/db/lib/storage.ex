@@ -1,17 +1,21 @@
 defmodule Db.Storage do
+  @moduledoc """
+  Define the schema, table and init mnesia database.
+  """
+
   alias FeApiWeb.Student
   alias :mnesia, as: Mnesia
 
-  require Record, Logger
+  require Record
+  require Logger
 
   Record.defrecord(:studentLog, uuid: nil, userId: nil, schoolId: nil,  timestamp: 0, type: :in, temperature: 0)
 
-  # def toRecord(%FeApiWeb.Student{} = student) do
-  #   Storage.studentLog(uuid: student.uuid, userId: student.userId, schoolId: student.schoolId,
-  #   type: student.type, temperature: student.temperature, timestamp: student.timestamp)
-  # end
-
+  @doc """
+  Simple check exist database or create a new database.
+  """
   def initDb() do
+    Logger.info("start init database...")
     result =
       case Mnesia.create_schema([node()]) do
         :ok ->
@@ -48,8 +52,13 @@ defmodule Db.Storage do
     else
       :ok
     end
+
+    Logger.info("init database done.")
   end
 
+  @doc """
+  Gets number of record stored in database.
+  """
   def get_counter() do
     Mnesia.table_info(:studentLog, :size)
   end

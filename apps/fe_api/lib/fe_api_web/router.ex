@@ -19,6 +19,6 @@ defmodule FeApiWeb.Router do
   scope "/api", FeApiWeb do
     pipe_through [:api, :authenticate_api_user]
 
-    resources "/student", StudentController, only: [:create, :index]
+    resources "/student", StudentController, only: [:create]
   end
 end

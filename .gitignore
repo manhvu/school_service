@@ -27,3 +27,5 @@ mix.lock
 /.elixir_ls/
 
 .mnesia/
+
+.DS_Store
