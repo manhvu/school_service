@@ -8,7 +8,7 @@ defmodule SimuTraffic.Worker do
   require Logger
 
   @derive Nestru.Encoder
-  defstruct [:timestamp, :userId, :schoolId, :temperature, :type]
+  defstruct [:timestamp, :user_id, :school_id, :temperature, :type]
 
   def start_link(arg) do
     pid = spawn_link(__MODULE__, :init, [arg])
@@ -49,8 +49,8 @@ defmodule SimuTraffic.Worker do
   def loop_request(id, n, url, %{} = stat) do
     student = %Worker{
       timestamp: get_timestamp(),
-      userId: "user_" <> Integer.to_string(Enum.random(1..10000)),
-      schoolId: "school_" <> Integer.to_string(Enum.random(1..1500)) ,
+      user_id: "user_" <> Integer.to_string(Enum.random(1..10000)),
+      school_id: "school_" <> Integer.to_string(Enum.random(1..1500)) ,
       temperature: Enum.random(30..42), # temperature at Celius
       type: get_random_type()
     }

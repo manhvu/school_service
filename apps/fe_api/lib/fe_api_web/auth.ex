@@ -18,9 +18,9 @@ defmodule FeApiWeb.Auth do
     |> get_token()
     |> verify_token()
     |> case do
-      {:ok, userId} ->
-        Logger.debug("verify token sucess for #{userId}")
-        assign(conn, :currentUser, userId)
+      {:ok, user_id} ->
+        Logger.debug("verify token sucess for #{user_id}")
+        assign(conn, :currentUser, user_id)
       _unauthorized ->
         # skip for test & dev environment.
         if Application.get_env(:fe_api, :test_env)[:disable_auth] do

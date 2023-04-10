@@ -8,8 +8,9 @@ defmodule Db.StoreJob do
   require Logger
 
   alias Db.Queue
-  alias FeApiWeb.Student
   alias :mnesia, as: Mnesia
+  alias Db.RealtimeCheckerJob, as: Filter
+  alias Db.Student
 
   ## API
 
@@ -44,15 +45,14 @@ defmodule Db.StoreJob do
         schedule_work(1000)
         counter
       student ->
-        r = Student.toTuple(student, :studentLog)
-
-        r2 = Mnesia.transaction(
+        Filter.add(student)
+        r = Mnesia.transaction(
           fn ->
-            Mnesia.write(r)
+            Mnesia.write(Student.toTuple(student, :student_log))
           end
         )
 
-        Logger.debug("write data to db, result: #{inspect(r2)}")
+        Logger.debug("write data to db, result: #{inspect(r)}")
         schedule_work(0)
         counter + 1
     end

@@ -3,13 +3,13 @@ defmodule Db.Storage do
   Define the schema, table and init mnesia database.
   """
 
-  alias FeApiWeb.Student
+  alias Db.Student
   alias :mnesia, as: Mnesia
 
   require Record
   require Logger
 
-  Record.defrecord(:studentLog, uuid: nil, userId: nil, schoolId: nil,  timestamp: 0, type: :in, temperature: 0)
+  Record.defrecord(:student_log, uuid: nil, user_id: nil, school_id: nil,  timestamp: 0, type: :in, temperature: 0)
 
   @doc """
   Simple check exist database or create a new database.
@@ -31,15 +31,15 @@ defmodule Db.Storage do
       :ok ->
         :ok
       nil ->
-        :ok = Mnesia.wait_for_tables([:studentLog], 15000)
+        :ok = Mnesia.wait_for_tables([:student_log], 15000)
     end
 
     if result != :existed do
-      case  Mnesia.create_table(:studentLog,
+      case  Mnesia.create_table(:student_log,
         [
-          record_name: :studentLog,
+          record_name: :student_log,
           disc_copies: [node()],
-          attributes: studentLog() |> studentLog() |> Keyword.keys()
+          attributes: student_log() |> student_log() |> Keyword.keys()
         ]) do
         {:atomic, :ok} ->
           :ok
@@ -49,6 +49,21 @@ defmodule Db.Storage do
           Logger.error("cannot create schema, result: #{inspect r}")
           raise "failed to create table"
       end
+
+      case  Mnesia.create_table(:student_alert,
+      [
+        record_name: :student_log,
+        disc_copies: [node()],
+        attributes: student_log() |> student_log() |> Keyword.keys()
+      ]) do
+      {:atomic, :ok} ->
+        :ok
+      {:aborted, {:already_exists, _}} ->
+        :ok
+      r ->
+        Logger.error("cannot create schema, result: #{inspect r}")
+        raise "failed to create table"
+    end
     else
       :ok
     end
@@ -60,6 +75,6 @@ defmodule Db.Storage do
   Gets number of record stored in database.
   """
   def get_counter() do
-    Mnesia.table_info(:studentLog, :size)
+    Mnesia.table_info(:student_log, :size)
   end
 end

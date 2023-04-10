@@ -3,7 +3,7 @@ defmodule FeApiWeb.StudentController do
 
   require Logger
 
-  alias FeApiWeb.Student
+  alias Db.Student
   alias Db.Queue
 
   action_fallback FeApiWeb.FallbackController
@@ -16,7 +16,9 @@ defmodule FeApiWeb.StudentController do
     {:ok, student} = Nestru.decode_from_map(map, Student)
     Logger.debug("print struct\n #{inspect student}")
 
-   Queue.add(student)
+    # TO-DO: verify record.
+
+   Queue.add(Student.toTuple(student, :student_log))
 
    conn
    |> put_status(:created)

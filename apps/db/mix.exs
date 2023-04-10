@@ -19,15 +19,15 @@ defmodule Db.MixProject do
   def application do
     [
       mod: {Db.Application, []},
-      extra_applications: [:logger]
+      extra_applications: [:logger, :mnesia]
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ets, "~> 0.9.0"},
-      {:libcluster, "~> 3.3.2"},
+      {:nestru, "~> 0.3.2"},
+      {:ets, "~> 0.9.0"}
     ]
   end
 end

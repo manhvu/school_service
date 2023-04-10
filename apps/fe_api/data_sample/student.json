@@ -1,6 +1,6 @@
 {
-    "userId": "student1",
-    "schoolId": "school1",
+    "user_id": "student1",
+    "school_id": "school1",
     "timestamp": 123,
     "type": "in",
     "temperature": 35

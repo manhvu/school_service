@@ -7,15 +7,21 @@ defmodule Db.Application do
 
   @impl true
   def start(_type, _args) do
-    topology = Application.get_env(:libcluster, :topologies)
-    hosts = topology[:myapp][:config][:hosts]
-
     children = [
       {Db.Token, []},
       {Db.Queue, []},
-      {Db.StoreJob, [0]},
-      {Cluster.Supervisor, [topology, [name: MyApp.ClusterSupervisor]]}
+      {Db.StoreJob, [0]}
     ]
+
+    children =
+      case Application.get_env(:realtime_filter, :temperature)[:max] do
+        # default is one worker.
+        nil ->
+          children
+        n when is_integer(n) and n > 0 ->
+          # enable realtime filter
+          [{Db.RealtimeCheckerJob, [n]} | children]
+      end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

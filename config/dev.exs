@@ -54,8 +54,9 @@ config :fe_api, FeApiWeb.Endpoint,
     ]
   ]
 
-# Do not include metadata nor timestamps in development logs
-config :logger, :console, format: "[$level] $message\n"
+config :logger, :console,
+  level: :debug,
+  format: "$time $message $metadata[$level] \n"
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
@@ -67,9 +68,7 @@ config :phoenix, :plug_init_mode, :runtime
 config :fe_api, :test_env,
   disable_auth: true
 
-
-
 config :simu_traffic, :test_info,
-  counter: 10000,
-  worker: 10,
+  counter: 1_000,
+  worker: 5,
   url: "http://localhost:8080/api/student"

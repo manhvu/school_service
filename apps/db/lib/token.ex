@@ -16,11 +16,11 @@ defmodule Db.Token do
   @doc """
   Gets list of token for user.
   """
-  def get_tokens(userId) do
+  def get_tokens(user_id) do
     r =
       __MODULE__
       |> Set.wrap_existing!()
-      |> Set.get(userId, :not_found)
+      |> Set.get(user_id, :not_found)
 
     case r do
         {:ok, :not_found} -> nil
@@ -34,16 +34,16 @@ defmodule Db.Token do
   @doc """
   Checks a token of a user is existed.
   """
-  def existed_token(userId, token) do
-    GenServer.call(__MODULE__, {:existed_token, userId, token})
+  def existed_token(user_id, token) do
+    GenServer.call(__MODULE__, {:existed_token, user_id, token})
   end
 
   @doc """
   Adds a token for user.
   """
-  def add_token(userId, token) do
+  def add_token(user_id, token) do
     newToken = {token, NaiveDateTime.utc_now() }
-    GenServer.cast(__MODULE__, {:add_token, userId, newToken})
+    GenServer.cast(__MODULE__, {:add_token, user_id, newToken})
   end
 
   ## callbacks
@@ -54,24 +54,24 @@ defmodule Db.Token do
   end
 
   @impl true
-  def handle_cast({:add_token, userId, token}, table) do
+  def handle_cast({:add_token, user_id, token}, table) do
     tokens =
-      case get_tokens(userId) do
+      case get_tokens(user_id) do
         nil ->
           [token]
         list ->
           [token|list]
       end
 
-    Set.put(table, {userId, tokens})
+    Set.put(table, {user_id, tokens})
     {:noreply, table}
   end
 
   @impl true
-  def handle_call({:existed_token, userId, token}, _from, table) do
+  def handle_call({:existed_token, user_id, token}, _from, table) do
 
     result =
-      case get_tokens(userId) do
+      case get_tokens(user_id) do
          nil ->
            false
         list when is_list(list) ->

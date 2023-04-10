@@ -28,6 +28,7 @@ config :esbuild,
 
 # Configures Elixir's Logger
 config :logger, :console,
+  level: :info,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
@@ -38,17 +39,8 @@ config :phoenix, :json_library, Jason
 config :mnesia,
   dir: '.mnesia/'        # Notice the single quotes
 
-config :libcluster,
-  topologies: [
-    my_app: [
-      strategy: Cluster.Strategy.Epmd,
-      config: [hosts: [:nonode@nohost]]
-    ]
-  ]
-
-config :logger, :console,
-  level: :debug,
-  format: "$time $message $metadata[$level] \n"
+config :realtime_filter, :temperature,
+  max: 38
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
