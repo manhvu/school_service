@@ -3,6 +3,7 @@ defmodule Db.Application do
   # for more information on OTP Applications
   @moduledoc false
 
+  require Logger
   use Application
 
   @impl true
@@ -17,8 +18,10 @@ defmodule Db.Application do
       case Application.get_env(:realtime_filter, :temperature)[:max] do
         # default is one worker.
         nil ->
+          Logger.info("disable realtime filter")
           children
         n when is_integer(n) and n > 0 ->
+          Logger.info("enable realtime filter")
           # enable realtime filter
           [{Db.RealtimeCheckerJob, [n]} | children]
       end

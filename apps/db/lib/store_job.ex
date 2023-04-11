@@ -11,7 +11,8 @@ defmodule Db.StoreJob do
   alias :mnesia, as: Mnesia
   alias Db.RealtimeCheckerJob, as: Filter
   alias Db.Student
-
+  alias Db.Storage
+  import Db.Storage
   ## API
 
   @doc """
@@ -22,6 +23,7 @@ defmodule Db.StoreJob do
   end
 
   def start_link([counter]) do
+    Logger.info("start store data to db worker")
     GenServer.start_link(__MODULE__, counter)
   end
 
@@ -46,13 +48,7 @@ defmodule Db.StoreJob do
         counter
       student ->
         Filter.add(student)
-        r = Mnesia.transaction(
-          fn ->
-            Mnesia.write(Student.toTuple(student, :student_log))
-          end
-        )
-
-        Logger.debug("write data to db, result: #{inspect(r)}")
+        write_to_db(student)
         schedule_work(0)
         counter + 1
     end
@@ -60,11 +56,15 @@ defmodule Db.StoreJob do
     {:noreply, counter}
   end
 
-  @doc """
-  Sends a command to worker to process data.
-  """
   defp schedule_work(time) do
     # TO-DO: improve this.
     Process.send_after(self(), :work , time)
   end
+
+  defp write_to_db(%Student{} = student) do
+    {_, table} = ensure_exist_table(student)
+    add_record(table, student)
+    Logger.debug("added #{inspect student} to db.")
+end
+
 end

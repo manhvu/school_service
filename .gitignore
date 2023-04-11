@@ -28,4 +28,6 @@ mix.lock
 
 .mnesia/
 
+.mnesia_test/
+
 .DS_Store

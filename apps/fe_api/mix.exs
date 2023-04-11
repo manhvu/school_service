@@ -23,7 +23,7 @@ defmodule FeApi.MixProject do
   def application do
     [
       mod: {FeApi.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :db]
     ]
   end
 

@@ -20,13 +20,15 @@ defmodule Db.RealtimeCheckerJob do
   end
 
   def start_link([temperature]) do
-    GenServer.start_link(__MODULE__, temperature)
+    Logger.info("start realtime filter woker.")
+    GenServer.start_link(__MODULE__,  temperature,  name: __MODULE__)
   end
 
     ## callbacks
 
   @impl true
   def init(temperature) do
+    Logger.debug("start realtime filter with max temperature: #{temperature}")
     state = %{data: [], temperature: temperature, counter: 0}
 
     schedule_work(100)
@@ -38,8 +40,10 @@ defmodule Db.RealtimeCheckerJob do
   def handle_cast({:add, student}, %{temperature: max, data: filtered} = state) do
     filtered =
       if student.temperature > max do
+        Logger.debug("add new student to alert #{inspect student}")
         [student | filtered]
       else
+        Logger.debug("ignore student to alert #{inspect student}")
         filtered
       end
 
@@ -51,10 +55,10 @@ defmodule Db.RealtimeCheckerJob do
     state =
     case list do
       [] ->
-        schedule_work(3000)
+        schedule_work(1000)
         state
       [student|rest] ->
-        r = Student.toTuple(student, :student_alert)
+        r = Student.to_tuple(student, :student_alert)
 
         r2 = Mnesia.transaction(
           fn ->
@@ -71,9 +75,6 @@ defmodule Db.RealtimeCheckerJob do
     {:noreply, state}
   end
 
-  @doc """
-  Sends a command to worker to process data.
-  """
   defp schedule_work(time) do
     # TO-DO: improve this.
     Process.send_after(self(), :work , time)
