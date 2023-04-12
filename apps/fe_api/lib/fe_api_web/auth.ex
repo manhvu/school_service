@@ -85,8 +85,11 @@ defmodule FeApiWeb.Auth do
       ["Bearer " <> token] ->
         Logger.debug("token is included in header")
         token
-      _ ->
+      [] ->
         Logger.debug("token is missed in header")
+        nil
+      r ->
+        Logger.info("token is incorrect format, #{inspect r}")
         nil
     end
   end
