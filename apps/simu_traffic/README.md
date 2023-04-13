@@ -1,21 +1,28 @@
-# SimuTraffic
+# Simulator Traffic (simu_traffic)
 
-**TODO: Add description**
+Use for workload test FeApi.
 
-## Installation
+## Achitecture
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `simu_traffic` to your list of dependencies in `mix.exs`:
+The app generates request and send to FeApi app. The app can use number of client to simulate concurrent request.
 
-```elixir
-def deps do
-  [
-    {:simu_traffic, "~> 0.1.0"}
-  ]
-end
+## Dev Guide
+
+The app require config before start. You can check it in config file.
+
+For run test:
+```bash
+cd ./apps/simu_traffic
+mix test
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/simu_traffic>.
+For run Elixir:
+```bash
+cd ./app/simu_traffic
+iex -S mix phx.server
+```
 
+Then run command in Elixir shell:
+```bash
+Application.ensure_all_started(:simu_traffic)
+```

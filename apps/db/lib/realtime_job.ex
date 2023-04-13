@@ -35,7 +35,6 @@ defmodule Db.RealtimeCheckerJob do
     {:ok, state}
   end
 
-
   @impl true
   def handle_cast({:add, student}, %{temperature: max, data: filtered} = state) do
     filtered =

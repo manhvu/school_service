@@ -11,7 +11,8 @@ defmodule Db.Application do
     children = [
       {Db.Token, []},
       {Db.Queue, []},
-      {Db.StoreJob, [0]}
+      {Db.StoreJob, [0]},
+      {Db.Analyzer, []}
     ]
 
     children =

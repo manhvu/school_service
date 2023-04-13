@@ -17,7 +17,7 @@ config :fe_api, FeApiWeb.Endpoint,
   secret_key_base: "Fbtyydbohz7kL9tazhopcUsnVpJATZ1eWuTLStd3SuHCvtSR1CNmadXdsFgWMsgK"
 
   config :fe_api, :test_env,
-    disable_auth: false
+    disable_auth: false # disable to test token
 
 
 config :logger, :console,

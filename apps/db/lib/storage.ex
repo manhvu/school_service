@@ -91,8 +91,28 @@ defmodule Db.Storage do
     String.to_atom(str_name)
   end
 
-  def gen_table_name(date) do
-    str_name ="student_#{ Date.to_string(DateTime.to_date(date))}"
+  def gen_table_name(%DateTime{} = date_time) do
+    str_name ="student_#{ Date.to_string(DateTime.to_date(date_time))}"
+    String.to_atom(str_name)
+  end
+
+  def gen_table_name(%Date{} = date) do
+    str_name ="student_#{ Date.to_string(date)}"
+    String.to_atom(str_name)
+  end
+
+  def gen_result_table_name(%Student{} = student) do
+    str_name ="result_#{ Date.to_string(student.date)}"
+    String.to_atom(str_name)
+  end
+
+  def gen_result_table_name(%DateTime{} = date_time) do
+    str_name ="result_#{ Date.to_string(DateTime.to_date(date_time))}"
+    String.to_atom(str_name)
+  end
+
+  def gen_result_table_name(%Date{} = date) do
+    str_name ="result_#{ Date.to_string(date)}"
     String.to_atom(str_name)
   end
 
@@ -117,5 +137,10 @@ defmodule Db.Storage do
         Process.put(:last_table, table_name)
         {old_table, table_name}
     end
+  end
+
+  def table_exists(table) when is_atom(table) do
+    list_table = Mnesia.system_info(:tables)
+    Enum.member?(list_table, table)
   end
 end

@@ -1,18 +1,31 @@
-# FeApi
+# Frontend Api (FeApi)
 
-To start your Phoenix server:
+A REST API that receives data from client (mobile, web app) verify data then push to queue of Db service.
 
-  * Install dependencies with `mix deps.get`
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+## Achitecture
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+![Db service](./docs/FeApi.png)
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+(architect & data flow)
 
-## Learn more
+## Dev Guide
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+The app requires Db app, make sure Db is compiled before start app.
+
+For run in dev environment:
+```bash
+cd ./apps/fe_api
+mix phx.server
+```
+
+For run test:
+```bash
+cd ./apps/fe_api
+mix test
+```
+
+For run Elixir:
+```bash
+cd ./apps/fe_api
+iex -S mix phx.server
+```

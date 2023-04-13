@@ -1,0 +1,58 @@
+<mxfile host="Electron" modified="2023-04-13T09:21:33.106Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="L5lERx7NhHrPfRdw_Qlb" version="21.1.2" type="device">
+  <diagram name="Page-1" id="56weg6uC7MEWqBnEIINK">
+    <mxGraphModel dx="1114" dy="999" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="6A0KOn8uIdy0uQehnbU4-1" value="Frontend API" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="275" width="120" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="6A0KOn8uIdy0uQehnbU4-2" value="Student Log Queue" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="280" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="6A0KOn8uIdy0uQehnbU4-3" value="Mnesia" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+          <mxGeometry x="420" y="560" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="6A0KOn8uIdy0uQehnbU4-5" value="Store Process" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="410" y="420" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="6A0KOn8uIdy0uQehnbU4-6" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="6A0KOn8uIdy0uQehnbU4-1" target="6A0KOn8uIdy0uQehnbU4-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="540" as="sourcePoint" />
+            <mxPoint x="450" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6A0KOn8uIdy0uQehnbU4-7" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="6A0KOn8uIdy0uQehnbU4-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="540" as="sourcePoint" />
+            <mxPoint x="450" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6A0KOn8uIdy0uQehnbU4-8" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="6A0KOn8uIdy0uQehnbU4-5" target="6A0KOn8uIdy0uQehnbU4-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="540" as="sourcePoint" />
+            <mxPoint x="450" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6A0KOn8uIdy0uQehnbU4-9" value="Analyzer Process" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="160" y="560" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="6A0KOn8uIdy0uQehnbU4-10" value="Job Queue" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="140" y="440" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="6A0KOn8uIdy0uQehnbU4-14" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="6A0KOn8uIdy0uQehnbU4-9" target="6A0KOn8uIdy0uQehnbU4-10">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="530" as="sourcePoint" />
+            <mxPoint x="450" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6A0KOn8uIdy0uQehnbU4-15" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="6A0KOn8uIdy0uQehnbU4-9" target="6A0KOn8uIdy0uQehnbU4-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="530" as="sourcePoint" />
+            <mxPoint x="450" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
